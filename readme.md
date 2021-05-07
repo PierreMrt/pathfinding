@@ -13,7 +13,7 @@ search equally in every directions. This allows to make sure we always find the 
 efficiency.
 
 ### Utilisation
-> python \PATH_TO_FILE\Pathfinding.py
+> python \PATH_TO_FILE\main.py
 
 Place an origin and a destination wherever you want by clicking on the grid. First click places the origin (A), second 
 places the destination (B).
