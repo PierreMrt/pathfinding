@@ -64,34 +64,28 @@ class GUI(Frame):
         reset.grid(ipady=5, ipadx=10, row=1, column=2)
 
     def button_click(self, button, i, j):
-        # If origin is not set, create it
         if self.origin is None:
             button.config(bg='DodgerBlue2', text='A')
             self.top_label.config(text='Place the destination')
             self.origin = Cell(button, i, j)
 
-        # If destination is not set, create it
         elif self.destination is None:
             button.config(bg='DodgerBlue2', text='B')
             self.top_label.config(text='Place some obstacles')
             self.destination = Cell(button, i, j)
 
-        # If both destination and origin are set, the next clicks create obstacles
         else:
             self.top_label.config(text='Place some obstacles')
 
-            # If button was an obstacle, remove it from obstacles and put in white
             if (i, j) in self.obstacles:
                 button.config(bg='white', text=' ')
                 self.obstacles.remove((i, j))
 
-            # Otherwise create the button as an obstacle (in black)
             else:
                 button.config(bg='black', text=' ')
                 self.obstacles.append((i, j))
 
     def reset(self):
-        # When reset button is clicked, reset the grid to its initial state
         self.origin = None
         self.destination = None
 
@@ -179,26 +173,21 @@ class GUI(Frame):
                     else:
                         continue
 
-            # If we exited the loop without finding a solution, the path was not solvable
             if len(self.open) == 0:
                 self.top_label.config(text='No path has been found. Click reset and create another problem.')
 
     def check_neighbours(self, current):
         children = []
-        # Check all cells around current cell as well as itself
         for i in range(-1, 2):
             for j in range(-1, 2):
                 pos = (current.pos[0] + i, current.pos[1] + j)
                 for cell in self.cells:
                     if pos == cell.pos:
                         child = cell
-                # if cell checked is current cell, ignore it
                 if pos == current.pos:
                     continue
                 else:
-                    # Check if checked cell is part of the grid
                     if 0 <= pos[0] < self.dimension and 0 <= pos[1] < self.dimension:
-                        # Check that cell is not in obstacles or already checked cells, if yes, ignore it
                         if pos in self.obstacles or child in self.closed:
                             continue
 
@@ -209,7 +198,6 @@ class GUI(Frame):
     def retrace_path(self, current):
         parent = current.parent
 
-        # Retrace path in green and calculate numbers of steps
         steps = 0
         while parent is not None:
             if parent.name != self.origin.name:
@@ -219,7 +207,6 @@ class GUI(Frame):
                 steps += 1
             parent = parent.parent
 
-        # Calculate nodes expanded
         nodes = 0
         for cell in self.cells:
             if cell.name.cget('bg') == 'orange' or cell.name.cget('bg') == 'green4' or cell.name.cget('bg') == 'red3':
@@ -230,8 +217,6 @@ class GUI(Frame):
 
 class Cell:
     def __init__(self, name, row, col):
-        # super().__init__(self, master=None)
-
         self.name = name
         self.pos = (row, col)
         self.parent = None
